@@ -1,0 +1,24 @@
+// @import '~reset-css';
+@import '~normalize.css';
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500&display=swap');
+
+body {
+    color: #333333;
+    font-size: 14px;
+    font-family: 'Noto Sans TC', sans-serif;
+    background: #fefefe;
+}
+
+h1 {text-align: center;}
+
+#banner {
+    width: 1000px;
+    height: 460px;
+    margin: 0 auto;
+    background: url(../img/index/banner.jpg) center top no-repeat;
+}
+
+img {
+    display: block;
+    margin: 0 auto;
+}

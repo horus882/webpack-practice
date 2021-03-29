@@ -1,1 +1,1 @@
-# webpack-4-practice
+# webpack-practice

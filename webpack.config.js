@@ -69,7 +69,19 @@ var config = {
             },
             {
                 test: /\.pug$/,
-                use: ['raw-loader', 'pug-html-loader']
+                use: [
+                    'raw-loader',
+                    {
+                        loader: 'pug-html-loader',
+                        options: {
+                            // https://milkmidi.medium.com/test-c3a23ca0cc55
+                            data: {
+                                NODE_ENV: process.env.NODE_ENV,
+                                AUTHOR: 'Brent Hsieh'
+                            }
+                        }
+                    }
+                ]
             },
             {
                 test: /\.html$/,

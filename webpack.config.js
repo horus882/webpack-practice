@@ -11,11 +11,6 @@ module.exports = {
         // 打包輸出後的 js 的路徑與檔名 ['js/[name].js', 'js/bundle.js']
         filename: 'js/bundle.js'
     },
-    // resolve: {
-    //     alias: {
-    //         '@img': path.resolve(__dirname, 'src/img'),
-    //     },
-    // },
     module: {
         rules: [
             {
@@ -27,29 +22,41 @@ module.exports = {
                 use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader']
             },
             {
-                test: /\.html$/,
-                use: 'raw-loader'
-            },
-            {
-                test: /\.(png|jpg|gif|jpe?g|svg)$/,
+                test: /\.(png|jpg|gif|jpe?g|svg)$/, // /\.(woff|woff2|eot|ttf|otf|png|svg|jpg|gif)$/
                 use: [
                     {
-                        loader: 'file-loader',
+                        loader: 'url-loader',
                         options: {
-                            // [name] 為使用原本檔案的名稱；[ext] 則是副檔名，組合起來的意思就是，我們希望可以保留原本檔案的名稱以及副檔名
+                            limit: 8192,
+                            esModule: false,
                             name: '[path][name].[ext]',
-                            // 待補說明
                             context: path.resolve(__dirname, 'src'),
-                            // 待補說明
-                            // outputPath: 'dist/',
-                            // 設定目標文件的路徑，白話說就是 SCSS 編譯後產生的 CSS 檔內圖檔的路徑
                             publicPath: '../',
-                            // 默認為 true ，如果為 true，則將該檔案輸出。如果為 false，則僅在 CSS 內寫入 publicPath，而不會輸出該檔案。
-                            // emitFile: true,
-                            esModule: false
-                        }  
-                    }
+                            fallback: require.resolve('file-loader'),
+                            // outputPath: './'
+                        }
+                    },
+                    // {
+                    //     loader: 'file-loader',
+                    //     options: {
+                    //         // [name] 為使用原本檔案的名稱；[ext] 則是副檔名，組合起來的意思就是，我們希望可以保留原本檔案的名稱以及副檔名
+                    //         name: '[path][name].[ext]',
+                    //         // 待補說明
+                    //         context: path.resolve(__dirname, 'src'),
+                    //         // 待補說明
+                    //         // outputPath: 'dist/',
+                    //         // 設定目標文件的路徑，白話說就是 SCSS 編譯後產生的 CSS 檔內圖檔的路徑
+                    //         publicPath: '../',
+                    //         // 默認為 true ，如果為 true，則將該檔案輸出。如果為 false，則僅在 CSS 內寫入 publicPath，而不會輸出該檔案。
+                    //         // emitFile: true,
+                    //         esModule: false
+                    //     }  
+                    // },
                 ]
+            },
+            {
+                test: /\.html$/,
+                use: 'raw-loader'
             }
         ]
     },

@@ -1,4 +1,3 @@
-# webpack-practice
 # Webpack 筆記
 ## 套件安裝及設定
 ---
@@ -173,6 +172,33 @@ https://awdr74100.github.io/2020-07-24-webpack-imagewebpackloader/
 ```
 npm install image-webpack-loader --save-dev
 ```
+webpack.config.js 設定
+```
+module: {
+    // ...
+    rules: [
+        {
+            test: /\.(png|jpg|gif|jpe?g|svg)$/, 
+            use: [
+                {
+                    // image-webpack-loader 在陣列中須於 url-loader 和 file-loader 之後 (webpack 優先處理)
+                    loader: 'image-webpack-loader',
+                    options: {
+                        disable:    process.env.NODE_ENV === 'production' ? false : true,
+                        mozjpeg:    { progressive: true, quality: 65 },
+                        optipng:    { enabled: false },
+                        pngquant:   { quality: [0.65, 0.9], speed: 4 },
+                        gifsicle:   { interlaced: false },
+                        webp:       { quality: 75 },  // 配置選項表示啟用 WebP 優化器
+                    }
+                }
+            ]
+        },
+
+    ]
+    // ...
+},
+```
 ---
 ### cross-env
 跨平台環境變量設置套件
@@ -243,7 +269,7 @@ module.exports = config
 ```
 ---
 
-## 待了解
+## 參考資料
 - [Webpack｜教學：webpack多入口/多出口配置](https://medium.com/anna-hsaio-%E5%89%8D%E7%AB%AF%E9%96%8B%E7%99%BC%E8%A8%98/webpack-%E6%95%99%E5%AD%B8-webpack%E5%A4%9A%E5%85%A5%E5%8F%A3-%E5%A4%9A%E5%87%BA%E5%8F%A3%E9%85%8D%E7%BD%AE-b15a1a2fd74a)
 - [使用 Webpack 打包圖片](https://medium.com/@pvt5r486/%E4%BD%BF%E7%94%A8-webpack-%E6%89%93%E5%8C%85%E5%9C%96%E7%89%87-8f0e0f453f30)
 - [使用 webpack 打包多頁面應用（Multiple-Page Application）](https://www.bookstack.cn/read/webpack-and-spa-guide/spilt.5.README.md)

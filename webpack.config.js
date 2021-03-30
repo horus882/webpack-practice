@@ -74,6 +74,7 @@ var config = {
                     {
                         loader: 'pug-html-loader',
                         options: {
+                            pretty: true,
                             // https://milkmidi.medium.com/test-c3a23ca0cc55
                             data: {
                                 NODE_ENV: process.env.NODE_ENV,
@@ -128,12 +129,13 @@ Object.keys(entryFiles).map(index => {
     config.plugins.push(
         new HtmlWebpackPlugin({
             template: path.join(__dirname, `src/pages/${pageName}.pug`),
-            filename: `${pageName}.html`,
+            // filename: `${pageName}.html`,
+            filename: process.env.NODE_ENV === 'production' ? `${pageName}.php` : `${pageName}.html`,
             // 引入的 js 文件
             chunks: [pageName],
             inject: true,
             minify: {
-                collapseWhitespace: true,
+                collapseWhitespace: false,
                 collapseBooleanAttributes: true, 
                 preserveLineBreaks: false,
                 sortAttributes: true,

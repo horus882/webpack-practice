@@ -159,11 +159,28 @@ module: {
     rules: [
         {
             test: /\.pug$/,
-            use: ['raw-loader', 'pug-html-loader']
+            use: [
+                'raw-loader',
+                {
+                    loader: 'pug-html-loader',
+                    options: {
+                        // 傳遞變數到 pug 內
+                        data: {
+                            NODE_ENV: process.env.NODE_ENV,
+                            AUTHOR: 'Brent Hsieh'
+                        }
+                    }
+                }
+            ]
         },
     ]
     // ...
 },
+```
+pug 接變數
+```
+div=NODE_ENV
+div=AUTHOR
 ```
 ---
 ### image-webpack-loader  
@@ -202,13 +219,20 @@ module: {
 ---
 ### cross-env
 跨平台環境變量設置套件
-使用 image-webpack-loader 並設置 webpack.config 時遇到 process.env.NODE_ENV 為 undefined (disable: process.env.NODE_ENV === 'production' ? false : true)，使用此套件並修改 package.json 即可解決
+我在使用 image-webpack-loader 設定 webpack.config.js 時遇到 process.env.NODE_ENV 為 undefined (disable: process.env.NODE_ENV === 'production' ? false : true)，使用此套件並修改 package.json 即可解決
 ```
 npm install cross-env --save-dev
 ```
+package.json 設定
+```
+"scripts": {
+    "serve": "cross-env NODE_ENV=development webpack serve --mode development",
+    "build": "cross-env NODE_ENV=production webpack --mode production"
+},
+```
 ---
 ### glob
-由於每增加一個頁面都需要在 webpack.config.js 裡新增 entry 和 plugins，因此引入 glob 來讀取所有 html, pug 檔案，然後在動態設定 entry 和 plugins，適合用於 MPA (多頁面應用程式)，這邊使用 pug 作為範例
+由於每增加一個頁面都需要在 webpack.config.js 裡新增 entry 和 plugins 會覺得非常不便，因此引入 glob 來讀取所有 html, pug 檔案，然後在動態設定 entry 和 plugins，適合用於 MPA (多頁面應用程式)，這邊使用 pug 作為範例
 ```
 npm install glob --save-dev
 ```

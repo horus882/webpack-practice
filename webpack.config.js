@@ -1,15 +1,17 @@
-const path = require('path');
-const webpack = require('webpack');
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const path                      = require('path');
+const webpack                   = require('webpack');
+const glob                      = require('glob');
+const HtmlWebpackPlugin         = require("html-webpack-plugin");
+const MiniCssExtractPlugin      = require("mini-css-extract-plugin");
+const { CleanWebpackPlugin }    = require('clean-webpack-plugin');
 
-module.exports = {
+var config = {
     mode: process.env.NODE_ENV,
     entry: './src/main.js',
     output: {
         path: path.resolve(__dirname, 'dist'),
-        // 打包輸出後的 js 的路徑與檔名 ['js/[name].js', 'js/bundle.js']
-        filename: 'js/bundle.js'
+        // filename: 'js/bundle.js',   // SPA
+        filename: 'js/[name].js'       // MPA
     },
     module: {
         rules: [
@@ -36,6 +38,17 @@ module.exports = {
                             // outputPath: './'
                         }
                     },
+                    {
+                        loader: 'image-webpack-loader',
+                        options: {
+                            disable:    process.env.NODE_ENV === 'production' ? false : true,
+                            mozjpeg:    { progressive: true, quality: 65 },
+                            optipng:    { enabled: false },
+                            pngquant:   { quality: [0.65, 0.9], speed: 4 },
+                            gifsicle:   { interlaced: false },
+                            webp:       { quality: 75 },  // 配置選項表示啟用 WebP 優化器
+                        }
+                    }
                     // {
                     //     loader: 'file-loader',
                     //     options: {
@@ -55,6 +68,10 @@ module.exports = {
                 ]
             },
             {
+                test: /\.pug$/,
+                use: ['raw-loader', 'pug-html-loader']
+            },
+            {
                 test: /\.html$/,
                 use: 'raw-loader'
             }
@@ -62,12 +79,17 @@ module.exports = {
     },
     plugins: [
         new MiniCssExtractPlugin({
-            filename: 'css/[name].css'
+            filename: 'css/bundle.css'
         }),
-        new HtmlWebpackPlugin({
-            template: './src/index.html',
-            filename: 'index.html'
-        }),
+        // new HtmlWebpackPlugin({
+        //     template: './src/index.html',
+        //     filename: 'index.html'
+        // }),
+        // new HtmlWebpackPlugin({
+        //     template: './src/pages/index.pug',
+        //     filename: 'index.html'
+        // }),
+        new CleanWebpackPlugin()
     ],
     devtool: 'source-map',                      // 生成 SourceMap
     devServer: {
@@ -76,6 +98,40 @@ module.exports = {
         compress: true,
         port: 7777,
         hot: true,
-        open: true,
+        // open: true,
     }
 }
+
+const entry = {}
+const entryFiles = glob.sync(path.join(__dirname, './src/pages/*.pug'));
+
+Object.keys(entryFiles).map(index => {
+
+    const entryFile = entryFiles[index];
+    const match     = entryFile.match(/src\/pages\/(.*)\.pug/);
+    const pageName  = match && match[1];
+
+    entry[pageName] = './src/js/' + pageName + '.js';
+
+    config.plugins.push(
+        new HtmlWebpackPlugin({
+            template: path.join(__dirname, `src/pages/${pageName}.pug`),
+            filename: `${pageName}.html`,
+            // 引入的 js 文件
+            chunks: [pageName],
+            inject: true,
+            minify: {
+                collapseWhitespace: true,
+                collapseBooleanAttributes: true, 
+                preserveLineBreaks: false,
+                sortAttributes: true,
+                removeComments: true
+            }
+        })
+    );
+
+})
+
+config.entry = entry;
+
+module.exports = config

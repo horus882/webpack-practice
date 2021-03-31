@@ -108,7 +108,7 @@ var config = {
     devServer: {
         contentBase: path.join(__dirname, '/'), // contentBase 表示的是告訴伺服器從哪裡提供內容。（只有想提供靜態文件時才需要）['./dist']
         // publicPath: '/dist/',                // publicPath 表示的是打包生成的靜態文件所在的位置（若是 devServer 裡面的 publicPath 沒有設置，則會認為是 output 裡面設置的 publicPath 的值）
-        watchContentBase: true,
+        watchContentBase: true,                 // html 內容有改變時會自動重新整理
         compress: true,
         port: 7777,
         hot: true,

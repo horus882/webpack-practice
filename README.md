@@ -25,6 +25,8 @@ webpack.config.js 設定
 module.exports = {
     // ...
     devServer: {
+        host: '0.0.0.0',                        // 允許區網設備進行訪問
+        useLocalIp: true,                       // 允許區網設備進行訪問
         contentBase: path.join(__dirname, '/'), // contentBase 表示的是告訴伺服器從哪裡提供內容。（只有想提供靜態文件時才需要）['./dist']
         // publicPath: '/dist/',                // publicPath 表示的是打包生成的靜態文件所在的位置（若是 devServer 裡面的 publicPath 沒有設置，則會認為是 output 裡面設置的 publicPath 的值）
         watchContentBase: true,                 // html 內容有改變時會自動重新整理
@@ -300,3 +302,11 @@ module.exports = config
 - [使用 Webpack 打包圖片](https://medium.com/@pvt5r486/%E4%BD%BF%E7%94%A8-webpack-%E6%89%93%E5%8C%85%E5%9C%96%E7%89%87-8f0e0f453f30)
 - [使用 webpack 打包多頁面應用（Multiple-Page Application）](https://www.bookstack.cn/read/webpack-and-spa-guide/spilt.5.README.md)
 - [Webpack — Multiple Page Application](https://medium.com/summers-life/webpack-multiple-page-application-484c5983d104)
+
+---
+
+## 待研究
+[Webpack 前端打包工具 - 使用 postcss-loader 自動為 CSS 增加 Prefix](https://awdr74100.github.io/2020-03-05-webpack-postcssloader/)
+[【Webpack】PostCSS Loader has been initialized using an options object that does not match the API schema. options has an unknown property ‘plugins’. These properties are valid:とエラーが出る](https://www.white-space.work/webpack-post-css-loader-does-not-match-the-api-schema/)
+[Webpack 筆記整理 (九) - Sass-loader 和 autoPrefix](https://medium.com/@cos214159/webpack-%E7%AD%86%E8%A8%98%E6%95%B4%E7%90%86-%E4%B9%9D-sass-loader-%E5%92%8C-autoprefix-1305ffec77f7)
+[browserslist 导致 webpack-dev-server 的自动刷新失效](https://segmentfault.com/q/1010000038165280/a-1020000038439568)

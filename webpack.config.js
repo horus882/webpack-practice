@@ -31,7 +31,7 @@ var config = {
                         options: {
                             limit: 8192,
                             esModule: false,
-                            name: '[path][name].[ext]',
+                            name: '[path][name].[ext]?[hash:8]',
                             context: path.resolve(__dirname, 'src'),
                             publicPath: '../',
                             fallback: require.resolve('file-loader'),
@@ -106,6 +106,8 @@ var config = {
     ],
     devtool: 'source-map',                      // 生成 SourceMap
     devServer: {
+        host: '0.0.0.0',                        // 允許區網設備進行訪問
+        useLocalIp: true,                       // 允許區網設備進行訪問
         contentBase: path.join(__dirname, '/'), // contentBase 表示的是告訴伺服器從哪裡提供內容。（只有想提供靜態文件時才需要）['./dist']
         // publicPath: '/dist/',                // publicPath 表示的是打包生成的靜態文件所在的位置（若是 devServer 裡面的 publicPath 沒有設置，則會認為是 output 裡面設置的 publicPath 的值）
         watchContentBase: true,                 // html 內容有改變時會自動重新整理
